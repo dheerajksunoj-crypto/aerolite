@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AEROLITE</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#14161d">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#eef0f4;--pn:#fff;--tx:#1b1e27;--mu:#6a6f7d;--ln:#d5d8e0;--ac:#378add;--er:#d4493e;--ok:#2e9e5b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161d;--pn:#20232e;--tx:#e8eaf0;--mu:#8e94a4;--ln:#323645}}
+:root[data-theme="dark"]{--bg:#14161d;--pn:#20232e;--tx:#e8eaf0;--mu:#8e94a4;--ln:#323645}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{height:100%;margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,sans-serif}
+button,input{font:inherit;color:inherit}
+#app{height:100%;display:flex;flex-direction:column}
+.screens{flex:1;position:relative;min-height:0}
+.screen{position:absolute;inset:0;display:none;flex-direction:column}
+.screen.on{display:flex}
+.top{display:flex;flex:1;min-height:0}
+#code{flex:1;min-width:0;border:0;outline:0;resize:none;background:var(--pn);color:var(--tx);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:var(--fs,15px);line-height:1.6;padding:12px}
+.tools{width:58px;display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 0;border-left:1px solid var(--ln)}
+.ib{width:42px;height:42px;border-radius:12px;border:1px solid var(--ln);background:var(--pn);font-size:18px;padding:0}
+.run{background:var(--ok);border-color:var(--ok);color:#fff}
+.dot{display:inline-block;width:18px;height:18px;border-radius:50%;background:var(--ac);vertical-align:middle}
+.sym{display:flex;gap:6px;overflow-x:auto;padding:6px;border-top:1px solid var(--ln);background:var(--bg)}
+.k{flex:none;min-width:40px;padding:9px 10px;border-radius:8px;border:1px solid var(--ln);background:var(--pn);font-family:ui-monospace,Menlo,monospace}
+nav{display:flex;border-top:1px solid var(--ln);background:var(--pn)}
+nav button{flex:1;padding:13px;border:0;background:none;color:var(--mu);font-size:16px}
+nav button.on{color:var(--ac);font-weight:600;box-shadow:inset 0 2px 0 var(--ac)}
+.hd{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid var(--ln);background:var(--pn)}
+.pill{padding:8px 16px;border-radius:20px;border:1px solid var(--ln);background:var(--pn)}
+.pill.on{background:var(--ac);border-color:var(--ac);color:#fff}
+#bDrag{margin-left:auto}
+#area{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+#out{flex:1;overflow:auto;padding:12px;font:14px/1.6 ui-monospace,Menlo,monospace;white-space:pre-wrap}
+#out.hide{visibility:hidden}
+.er{color:var(--er)}.mu{color:var(--mu)}
+#askrow{display:none;gap:8px;padding:8px;border-top:1px solid var(--ln);background:var(--pn)}
+#ans{flex:1;min-width:0;padding:9px 12px;border-radius:8px;border:1px solid var(--ln);background:var(--bg)}
+.fl{position:absolute;right:16px;width:56px;height:56px;border-radius:50%;border:2px solid var(--ac);background:var(--pn);color:var(--ac);font-size:12px;touch-action:none;z-index:3;padding:0}
+#fo{bottom:96px}#fc{bottom:164px}
+.dragging .fl{border-style:dashed}
+.fl.sel{background:var(--ac);color:#fff}
+#pal{position:absolute;right:64px;top:70px;display:none;gap:10px;padding:10px;width:140px;flex-wrap:wrap;background:var(--pn);border:1px solid var(--ln);border-radius:12px;z-index:5}
+#pal button{width:34px;height:34px;border-radius:50%;border:2px solid var(--pn);padding:0}
+#set{position:absolute;inset:0;display:none;flex-direction:column;gap:8px;padding:16px;overflow:auto;background:var(--bg);z-index:10}
+#set label{display:flex;justify-content:space-between;align-items:center;gap:12px}
+#set input{width:140px;padding:8px 10px;border-radius:8px;border:1px solid var(--ln);background:var(--pn)}
+#smsg{min-height:1.4em}
+#sRules{width:100%;box-sizing:border-box;min-height:150px;padding:8px 10px;border-radius:8px;border:1px solid var(--ln);background:var(--pn);color:var(--tx);font:13px/1.5 ui-monospace,Menlo,monospace}
+</style></head>
+<body>
+<div id="app">
+<div class="screens">
+<section id="s1" class="screen on">
+ <div class="top">
+  <textarea id="code" spellcheck="false" autocapitalize="off" autocorrect="off">opt="hello AEROLITE"
+ipt(all)="Type something"
+opt="You typed: " + x</textarea>
+  <div class="tools">
+   <button class="ib" id="bSet" aria-label="Settings">&#9881;&#xFE0E;</button>
+   <button class="ib run" id="bRun" aria-label="Run">&#9654;&#xFE0E;</button>
+   <button class="ib" id="bCol" aria-label="Color"><span class="dot"></span></button>
+  </div>
+ </div>
+ <div class="sym" id="sym"></div>
+</section>
+<section id="s2" class="screen">
+ <div class="hd"><button class="ib" id="bBack" aria-label="Back">&larr;</button><strong>Output</strong><button class="pill" id="bDrag">Drag</button></div>
+ <div id="area">
+  <div id="out"></div>
+  <div id="askrow"><input id="ans" autocomplete="off" autocapitalize="off"><button class="pill" id="send">Send</button></div>
+  <button class="fl" id="fo">Out</button><button class="fl" id="fc">Clear</button>
+ </div>
+</section>
+<div id="pal"></div>
+<div id="set">
+ <strong>Syntax and display</strong>
+ <label>Output words<input id="sOut"></label>
+ <label>Input words<input id="sInp"></label>
+ <label>Assign symbol<input id="sAs"></label>
+ <label>Join symbol<input id="sJo"></label>
+ <label>Comment symbol<input id="sCm"></label>
+ <label>Text size<span><button class="pill" id="fm">A-</button> <button class="pill" id="fp">A+</button></span></label>
+ <div>Your own commands (rules)</div>
+ <textarea id="sRules" spellcheck="false" autocapitalize="off" autocorrect="off"></textarea>
+ <div class="mu">Format: rule say {value} =&gt; print({value})</div>
+ <div id="smsg" class="er"></div>
+ <div><button class="pill on" id="sSave">Save</button> <button class="pill" id="sReset">Reset</button></div>
+</div>
+</div>
+<nav><button id="n1" class="on">1</button><button id="n2">2</button></nav>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const DEF={out:"opt",inp:"ipt inp",assign:"=",join:"+",comment:"#",fs:15,ac:"#378add",rules:"rule set {new} to {value} => {new} = {value}\nrule add {value} to {var} => {var} = add({var}, {value})\nrule wait {number} => await wait({number})\nrule stop => stop()"};
+let S={...DEF};
+try{Object.assign(S,JSON.parse(localStorage.getItem("aero")||"{}"))}catch(e){}
+const store=()=>{try{localStorage.setItem("aero",JSON.stringify(S))}catch(e){}};
+const words=s=>s.split(/[\s,]+/).filter(Boolean);
+function apply(){
+ document.documentElement.style.setProperty("--ac",S.ac);
+ $("code").style.setProperty("--fs",S.fs+"px");
+ const keys=['"',S.assign,S.join,"(",")",words(S.out)[0],words(S.inp)[0],"all","int","float","alpha"];
+ $("sym").innerHTML="";
+ keys.forEach(t=>{const b=document.createElement("button");b.className="k";b.textContent=t;
+  b.onmousedown=e=>e.preventDefault();
+  b.onclick=()=>{const c=$("code");c.setRangeText(t,c.selectionStart,c.selectionEnd,"end");c.focus()};
+  $("sym").appendChild(b)});
+}
+function show(n){
+ $("s1").classList.toggle("on",n===1);$("s2").classList.toggle("on",n===2);
+ $("n1").classList.toggle("on",n===1);$("n2").classList.toggle("on",n===2);
+ $("pal").style.display=$("set").style.display="none";
+}
+$("n1").onclick=$("bBack").onclick=()=>show(1);
+$("n2").onclick=()=>show(2);
+
+/* ---- compiler ---- */
+const TY={
+ int:[/^[+-]?\d+$/,s=>parseInt(s,10),"enter a whole number"],
+ float:[/^[+-]?(\d+\.?\d*|\.\d+)$/,s=>parseFloat(s),"enter a number"],
+ alpha:[/^\p{L}+( +\p{L}+)*$/u,s=>s,"enter letters only"],
+ all:[/^.*$/,s=>/^[+-]?\d+$/.test(s)?parseInt(s,10):/^[+-]?(\d+\.?\d*|\.\d+)$/.test(s)?parseFloat(s):s,""]};
+const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+const sym=s=>/^\w+$/.test(s)?"(?<!\\w)"+esc(s)+"(?!\\w)":esc(s);
+function stripC(l){let q=false;for(let i=0;i<l.length;i++){if(l[i]==='"')q=!q;else if(!q&&l.startsWith(S.comment,i))return l.slice(0,i)}return l}
+function lex(t,fail){
+ const re=new RegExp(`(?<S>"[^"\\n]*")|(?<A>${sym(S.assign)})|(?<J>${sym(S.join)})|(?<F>-?\\d+\\.\\d+)|(?<I>-?\\d+)|(?<N>[A-Za-z_]\\w*)|(?<L>\\()|(?<R>\\))|(?<W>\\s+)|(?<B>.)`,"g");
+ const tk=[];
+ for(const m of t.matchAll(re)){
+  const k=Object.keys(m.groups).find(g=>m.groups[g]!==undefined);
+  if(k==="W")continue;
+  if(k==="B")fail(m[0]==='"'?"missing closing quote":"unexpected character "+m[0]);
+  tk.push([k,m[0]]);
+ }
+ return tk;
+}
+function parse(src){
+ const outW=words(S.out),inW=words(S.inp),defined=new Set(),stmts=[];
+ const lines=src.replace(/[\u201C\u201D]/g,'"').split("\n");
+ for(let n=0;n<lines.length;n++){
+  const fail=m=>{throw new Error("line "+(n+1)+": "+m)};
+  const tk=lex(stripC(lines[n]),fail);
+  if(!tk.length)continue;
+  const expr=a=>{
+   const terms=[];let want=true;
+   for(const [k,v] of a){
+    if(want){
+     if(k==="S")terms.push({s:v.slice(1,-1)});
+     else if(k==="I"||k==="F")terms.push({n:+v});
+     else if(k==="N"){if(!defined.has(v))fail(v+" has no value yet (use "+inW[0]+" first)");terms.push({v})}
+     else fail("unexpected "+v);
+     want=false;
+    }else{if(k!=="J")fail("use "+S.join+" to join items");want=true}
+   }
+   if(want)fail("missing a value after "+S.join);
+   return terms;
+  };
+  if(tk[0][0]==="N"&&outW.includes(tk[0][1])){
+   if(tk.length<3||tk[1][0]!=="A")fail("output looks like:  "+tk[0][1]+" "+S.assign+' "hello"');
+   stmts.push({k:"o",t:expr(tk.slice(2))});continue;
+  }
+  let tg="x",i=0;
+  if(tk.length>1&&tk[0][0]==="N"&&tk[1][0]==="A"){tg=tk[0][1];i=2}
+  const r=tk.slice(i);
+  if(r.length&&r[0][0]==="N"&&inW.includes(r[0][1])){
+   if(r.map(t=>t[0]).join("")!=="NLNRAS")fail("input looks like:  "+inW[0]+"(all) "+S.assign+' "type something"');
+   if(outW.includes(tg)||inW.includes(tg)||TY[tg])fail(tg+" is a reserved word, choose another name");
+   if(!TY[r[2][1]])fail("unknown type "+r[2][1]+" (use int, float, alpha, all)");
+   stmts.push({k:"i",tg,ty:r[2][1],p:r[5][1].slice(1,-1)});defined.add(tg);continue;
+  }
+  let hit=false;
+  for(const r of RULES){
+   const b=match(r.t,tk);if(!b)continue;
+   const m={},nw=[];
+   for(const [l,[k,x]] of Object.entries(b)){
+    if(k==="value")m[l]=gen(expr(x));
+    else if(k==="text")m[l]=JSON.stringify(x[1].slice(1,-1));
+    else if(k==="number")m[l]=String(+x[1]);
+    else{
+     const nm=x[1];
+     if(k==="var"&&!defined.has(nm))fail(nm+" has no value yet");
+     if(k==="new"){if(outW.includes(nm)||inW.includes(nm)||TY[nm])fail(nm+" is a reserved word, choose another name");nw.push(nm)}
+     m[l]="V["+JSON.stringify(nm)+"]";
+    }
+   }
+   stmts.push({k:"r",c:r.c.replace(/\{([A-Za-z_]\w*)\}/g,(a,l)=>l in m?m[l]:a)});
+   nw.forEach(z=>defined.add(z));hit=true;break;
+  }
+  if(hit)continue;
+  fail("I do not understand this line. Commands start with: "+[...outW,...inW,...RULES.map(r=>r.t[0][1])].join(", "));
+ }
+ return stmts;
+}
+let runId=0;
+function pr(t,c){const d=document.createElement("div");if(c)d.className=c;d.textContent=t;$("out").appendChild(d);$("out").scrollTop=1e9}
+function ask(p,ty){
+ return new Promise(res=>{
+  const [re,cv,msg]=TY[ty],row=$("askrow"),inp=$("ans");
+  pr(p,"mu");row.style.display="flex";inp.value="";inp.focus();
+  const go=()=>{
+   const t=inp.value.trim();
+   if(!re.test(t)){pr("  "+msg,"er");inp.value="";return}
+   row.style.display="none";pr("> "+t);res(cv(t));
+  };
+  $("send").onclick=go;inp.onkeydown=e=>{if(e.key==="Enter")go()};
+ });
+}
+async function run(){
+ show(2);const id=++runId;$("out").textContent="";$("askrow").style.display="none";
+ let st;try{st=parse($("code").value)}catch(e){pr(e.message,"er");return}
+ const V={};
+ for(const s of st){
+  if(id!==runId)return;
+  if(s.k==="o")pr(String(s.t.map(t=>"s"in t?t.s:"n"in t?t.n:V[t.v]).reduce((a,b)=>typeof a==="number"&&typeof b==="number"?a+b:String(a)+String(b))));
+  else if(s.k==="r"){
+   try{await RF(s.c)(V,t=>pr(String(t)),add,wait,stop)}catch(e){if(e instanceof Stop)return pr("Stopped","mu");pr(e.message,"er");return}
+   if(id!==runId)return;
+  }
+  else{const v=await ask(s.p,s.ty);if(id!==runId)return;V[s.tg]=v}
+ }
+ pr("Done","mu");
+}
+$("bRun").onclick=run;
+
+/* ---- color ---- */
+["#378add","#2e9e5b","#8a63d2","#e8833a","#d4493e","#1fa0a0"].forEach(c=>{
+ const b=document.createElement("button");b.style.background=c;b.setAttribute("aria-label","Color "+c);
+ b.onclick=()=>{S.ac=c;store();apply();$("pal").style.display="none"};$("pal").appendChild(b);
+});
+$("bCol").onclick=()=>{$("pal").style.display=$("pal").style.display==="flex"?"none":"flex"};
+
+/* ---- settings ---- */
+function fill(){$("sOut").value=S.out;$("sInp").value=S.inp;$("sAs").value=S.assign;$("sJo").value=S.join;$("sCm").value=S.comment;$("sRules").value=S.rules;$("smsg").textContent=""}
+$("bSet").onclick=()=>{fill();$("set").style.display="flex"};
+$("fm").onclick=()=>{S.fs=Math.max(11,S.fs-1);apply()};
+$("fp").onclick=()=>{S.fs=Math.min(28,S.fs+1);apply()};
+$("sSave").onclick=()=>{
+ const v={out:$("sOut").value.trim(),inp:$("sInp").value.trim(),assign:$("sAs").value.trim(),join:$("sJo").value.trim(),comment:$("sCm").value.trim()};
+ if(Object.values(v).some(x=>!x))return $("smsg").textContent="Fill in every field";
+ if(!words(v.out).every(w=>/^[A-Za-z_]\w*$/.test(w))||!words(v.inp).every(w=>/^[A-Za-z_]\w*$/.test(w)))return $("smsg").textContent="Words can use letters, digits and _ only";
+ if([v.assign,v.join,v.comment].some(x=>/[\s"]/.test(x)))return $("smsg").textContent="Symbols cannot contain spaces or quotes";
+ const snap={...S};S.rules=$("sRules").value;Object.assign(S,v);
+ const er=reload();if(er){S=snap;reload();return $("smsg").textContent=er}
+ store();apply();$("set").style.display="none";
+};
+$("sReset").onclick=()=>{S={...DEF};store();apply();reload();fill()};
+
+/* ---- drag mode: tap Drag, then touch an icon and move it ---- */
+let dm=false,sel=null,mv=false;
+$("bDrag").onclick=()=>{
+ dm=!dm;$("bDrag").classList.toggle("on",dm);$("area").classList.toggle("dragging",dm);
+ if(!dm&&sel){sel.classList.remove("sel");sel=null}
+};
+function place(el,x,y){
+ const a=$("area").getBoundingClientRect();
+ el.style.right=el.style.bottom="auto";
+ el.style.left=Math.max(0,Math.min(a.width-el.offsetWidth,x-a.left-el.offsetWidth/2))+"px";
+ el.style.top=Math.max(0,Math.min(a.height-el.offsetHeight,y-a.top-el.offsetHeight/2))+"px";
+}
+document.querySelectorAll(".fl").forEach(el=>{
+ el.addEventListener("pointerdown",e=>{
+  if(!dm)return;e.preventDefault();
+  if(sel)sel.classList.remove("sel");
+  sel=el;el.classList.add("sel");mv=true;el.setPointerCapture(e.pointerId);
+ });
+ el.addEventListener("pointermove",e=>{if(dm&&mv&&sel===el)place(el,e.clientX,e.clientY)});
+ el.addEventListener("pointerup",()=>{mv=false});
+ el.addEventListener("click",e=>{if(dm){e.stopPropagation();return}el.onact&&el.onact()});
+});
+$("fo").onact=()=>$("out").classList.toggle("hide");
+$("fc").onact=()=>{$("out").textContent=""};
+$("area").addEventListener("click",e=>{if(dm&&sel&&!e.target.closest(".fl,#askrow"))place(sel,e.clientX,e.clientY)});
+
+/* ---- rules: your own commands, edited in Settings ---- */
+const AF=Object.getPrototypeOf(async function(){}).constructor;
+const add=(a,b)=>typeof a==="number"&&typeof b==="number"?a+b:String(a)+String(b);
+const wait=s=>new Promise(r=>setTimeout(r,s*1000));
+class Stop extends Error{}
+const stop=()=>{throw new Stop()};
+const RF=c=>new AF("V","print","add","wait","stop",c);
+const HK=["value","text","number","var","new"];
+const hk=l=>HK.find(k=>l.startsWith(k));
+let RULES=[];
+function gen(terms){return terms.map(t=>"s"in t?JSON.stringify(t.s):"n"in t?String(t.n):"V["+JSON.stringify(t.v)+"]").reduce((a,b)=>"add("+a+","+b+")")}
+function match(rt,tk){
+ const b={};let i=0;
+ for(let p=0;p<rt.length;p++){
+  const q=rt[p];
+  if(q[0]!=="H"){if(!tk[i]||tk[i][0]!==q[0]||tk[i][1]!==q[1])return null;i++;continue}
+  const k=hk(q[1]);
+  if(k==="value"){
+   let j=i+1;
+   if(p+1<rt.length){const s=rt[p+1];while(j<tk.length&&!(tk[j][0]===s[0]&&tk[j][1]===s[1]))j++;if(j>=tk.length)return null}
+   else j=tk.length;
+   if(j<=i)return null;
+   b[q[1]]=[k,tk.slice(i,j)];i=j;
+  }else{
+   const t=tk[i];if(!t)return null;
+   const ok=k==="text"?t[0]==="S":k==="number"?(t[0]==="I"||t[0]==="F"):t[0]==="N";
+   if(!ok)return null;
+   b[q[1]]=[k,t];i++;
+  }
+ }
+ return i===tk.length?b:null;
+}
+function loadRules(){
+ const rs=[],used=[...words(S.out),...words(S.inp),...Object.keys(TY)];
+ S.rules.split("\n").forEach((ln,n)=>{
+  ln=ln.trim();if(!ln||ln[0]==="#")return;
+  const fail=m=>{throw new Error("rule line "+(n+1)+": "+m)};
+  const mm=ln.match(/^rule\s+(.*?)=>(.*)$/);
+  if(!mm)fail("a rule looks like:  rule say {value} => print({value})");
+  const toks=[];
+  mm[1].trim().split(/(\{[^{}]*\})/).forEach(p=>{
+   if(!p)return;
+   if(/^\{.*\}$/.test(p)){
+    const l=p.slice(1,-1);
+    if(!/^[A-Za-z_]\w*$/.test(l)||!hk(l))fail("the hole "+p+" must start with value, text, number, var or new");
+    if(toks.some(t=>t[0]==="H"&&t[1]===l))fail("the hole "+p+" is used twice");
+    toks.push(["H",l]);
+   }else toks.push(...lex(p,fail));
+  });
+  if(!toks.length||toks[0][0]!=="N")fail("a rule must start with a word");
+  if(used.includes(toks[0][1]))fail(toks[0][1]+" is already used by the language, choose another first word");
+  for(let j=0;j<toks.length-1;j++)if(toks[j][0]==="H"&&hk(toks[j][1])==="value"&&toks[j+1][0]==="H")fail("put a word or symbol between two holes");
+  const d={};
+  toks.forEach(t=>{if(t[0]==="H")d[t[1]]=hk(t[1])==="text"?'"t"':/^(var|new)/.test(t[1])?'V["t"]':"1"});
+  const code=mm[2].trim();
+  for(const z of code.matchAll(/\{([A-Za-z_]\w*)\}/g))if(!(z[1] in d))fail("the code uses {"+z[1]+"} but the pattern has no {"+z[1]+"}");
+  try{RF(code.replace(/\{([A-Za-z_]\w*)\}/g,(a,l)=>l in d?d[l]:a))}catch(e){fail("the code has a mistake ("+e.message+")")}
+  rs.push({t:toks,c:code});
+ });
+ return rs;
+}
+function reload(){try{RULES=loadRules();return ""}catch(e){RULES=[];return e.message}}
+reload();
+
+apply();
+if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body></html>
