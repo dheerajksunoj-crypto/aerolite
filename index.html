@@ -3,119 +3,182 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AEROLITE</title>
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#14161d">
+<meta name="theme-color" content="#050814">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
-:root{--bg:#eef0f4;--pn:#fff;--tx:#1b1e27;--mu:#6a6f7d;--ln:#d5d8e0;--ac:#378add;--er:#d4493e;--ok:#2e9e5b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161d;--pn:#20232e;--tx:#e8eaf0;--mu:#8e94a4;--ln:#323645}}
-:root[data-theme="dark"]{--bg:#14161d;--pn:#20232e;--tx:#e8eaf0;--mu:#8e94a4;--ln:#323645}
+:root{--bg:#050814;--pn:#0b0f22;--tx:#eaeaf6;--mu:#8a8fb0;--ln:#1f2347;--ac:#8A2BE2;--ac2:#3b82f6;--glow:rgba(138,43,226,.35);--er:#f87171;--kb:0px;--fs:15px;--mono:ui-monospace,Menlo,Consolas,monospace;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{height:100%;margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,sans-serif}
-button,input{font:inherit;color:inherit}
-#app{height:100%;display:flex;flex-direction:column}
-.screens{flex:1;position:relative;min-height:0}
-.screen{position:absolute;inset:0;display:none;flex-direction:column}
-.screen.on{display:flex}
-.top{display:flex;flex:1;min-height:0}
-#code{flex:1;min-width:0;border:0;outline:0;resize:none;background:var(--pn);color:var(--tx);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:var(--fs,15px);line-height:1.6;padding:12px}
-.tools{width:58px;display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 0;border-left:1px solid var(--ln)}
-.ib{width:42px;height:42px;border-radius:12px;border:1px solid var(--ln);background:var(--pn);font-size:18px;padding:0}
-.run{background:var(--ok);border-color:var(--ok);color:#fff}
-.dot{display:inline-block;width:18px;height:18px;border-radius:50%;background:var(--ac);vertical-align:middle}
-.sym{display:flex;gap:6px;overflow-x:auto;padding:6px;border-top:1px solid var(--ln);background:var(--bg)}
-.k{flex:none;min-width:40px;padding:9px 10px;border-radius:8px;border:1px solid var(--ln);background:var(--pn);font-family:ui-monospace,Menlo,monospace}
-nav{display:flex;border-top:1px solid var(--ln);background:var(--pn)}
-nav button{flex:1;padding:13px;border:0;background:none;color:var(--mu);font-size:16px}
-nav button.on{color:var(--ac);font-weight:600;box-shadow:inset 0 2px 0 var(--ac)}
-.hd{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid var(--ln);background:var(--pn)}
-.pill{padding:8px 16px;border-radius:20px;border:1px solid var(--ln);background:var(--pn)}
-.pill.on{background:var(--ac);border-color:var(--ac);color:#fff}
-#bDrag{margin-left:auto}
-#area{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:0}
-#out{flex:1;overflow:auto;padding:12px;font:14px/1.6 ui-monospace,Menlo,monospace;white-space:pre-wrap}
-#out.hide{visibility:hidden}
-.er{color:var(--er)}.mu{color:var(--mu)}
-#askrow{display:none;gap:8px;padding:8px;border-top:1px solid var(--ln);background:var(--pn)}
-#ans{flex:1;min-width:0;padding:9px 12px;border-radius:8px;border:1px solid var(--ln);background:var(--bg)}
-.fl{position:absolute;right:16px;width:56px;height:56px;border-radius:50%;border:2px solid var(--ac);background:var(--pn);color:var(--ac);font-size:12px;touch-action:none;z-index:3;padding:0}
-#fo{bottom:96px}#fc{bottom:164px}
-.dragging .fl{border-style:dashed}
-.fl.sel{background:var(--ac);color:#fff}
-#pal{position:absolute;right:64px;top:70px;display:none;gap:10px;padding:10px;width:140px;flex-wrap:wrap;background:var(--pn);border:1px solid var(--ln);border-radius:12px;z-index:5}
-#pal button{width:34px;height:34px;border-radius:50%;border:2px solid var(--pn);padding:0}
-#set{position:absolute;inset:0;display:none;flex-direction:column;gap:8px;padding:16px;overflow:auto;background:var(--bg);z-index:10}
-#set label{display:flex;justify-content:space-between;align-items:center;gap:12px}
-#set input{width:140px;padding:8px 10px;border-radius:8px;border:1px solid var(--ln);background:var(--pn)}
+button,input,select,textarea{font:inherit;color:inherit}
+#app{height:100%;display:flex;flex-direction:column;box-sizing:border-box;padding-bottom:var(--kb)}
+.screen{display:none;flex:1;flex-direction:column;min-height:0}.screen.on{display:flex}
+.bar{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.sq{flex:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--ac);background:linear-gradient(135deg,rgba(138,43,226,.35),rgba(10,14,34,.9));font-size:20px;padding:0}
+.seg{display:flex;flex:1;max-width:190px;padding:4px;border-radius:24px;border:1px solid var(--ln);background:var(--pn);margin:0 auto}
+.seg button{flex:1;border:0;background:none;color:var(--mu);padding:8px 0;border-radius:20px;font-size:16px}
+.seg button.on{background:linear-gradient(135deg,var(--ac),#4c1d95);color:#fff;font-weight:600}
+.play{flex:none;width:46px;height:46px;border-radius:50%;border:2px solid var(--ac2);background:var(--bg);font-size:18px;padding:0;box-shadow:0 0 14px var(--ac2)}
+.ol{padding:10px 16px;border-radius:14px;border:1.5px solid var(--ac);background:var(--bg);font-weight:600}
+.bl{border-color:var(--ac2)}.bl.on{background:var(--ac2);color:#fff}
+.ed{flex:1;display:flex;min-height:0;margin:0 6px 6px;border-radius:16px;border:1.5px solid transparent;background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(135deg,var(--ac),var(--ac2)) border-box;box-shadow:0 0 22px var(--glow);overflow:hidden}
+#gut{width:38px;flex:none;box-sizing:border-box;padding:12px 6px 12px 0;text-align:right;color:var(--mu);border-right:1px solid var(--ln);font-size:var(--fs);line-height:1.6;font-family:var(--mono);white-space:pre;overflow:hidden}
+#code{flex:1;min-width:0;border:0;outline:0;resize:none;background:transparent;padding:12px;white-space:pre;overflow:auto;font-size:var(--fs);line-height:1.6;font-family:var(--mono)}
+.sym{display:none;gap:6px;overflow-x:auto;padding:8px;border-top:1px solid var(--ln);background:var(--pn)}
+.typing .sym{display:flex}
+.k{flex:none;min-width:42px;padding:10px;border-radius:10px;border:1px solid var(--ln);background:var(--bg);font-family:var(--mono)}
+#area{flex:1;position:relative;margin:0 12px 8px;border:2px solid var(--ac2);border-radius:20px;background:#03050f;display:flex;flex-direction:column;min-height:0;overflow:hidden;box-shadow:0 0 18px rgba(59,130,246,.25)}
+.oh{padding:16px 12px 8px;border-bottom:1px solid var(--ln);margin:0 12px;font-family:var(--mono)}.oh span{color:#22d3ee}
+#out{flex:1;overflow:auto;padding:12px 18px;white-space:pre-wrap;font-size:var(--fs);line-height:1.6;font-family:var(--mono)}
+#out.hide{visibility:hidden}.er{color:var(--er)}.mu{color:var(--mu)}
+.inrow{display:flex;gap:10px;padding:0 12px 10px}
+#ans{flex:1;min-width:0;padding:12px 14px;border-radius:14px;border:1.5px solid var(--ac);background:var(--bg)}
+#ans:disabled,.inrow .ol:disabled{opacity:.45}
+.fl{position:absolute;right:14px;width:54px;height:54px;border-radius:50%;border:2px solid var(--ac);background:var(--pn);color:var(--ac);font-size:12px;touch-action:none;z-index:3;padding:0}
+.dragging .fl{border-style:dashed}.fl.sel{background:var(--ac);color:#fff}
+.scroll{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:12px}
+.card{padding:14px;border-radius:18px;border:1px solid var(--ln);background:linear-gradient(160deg,rgba(138,43,226,.14),var(--pn));display:flex;flex-direction:column;gap:10px}
+.card h3{margin:0;font-size:18px;color:#d8c4ff}.card h4{margin:6px 0 0;font-size:15px}
+.hdr{flex-direction:row;align-items:center;gap:12px}
+.card label{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#c8b4ff}
+.card input,.card select,#sRules{padding:9px 12px;border-radius:12px;border:1.5px solid var(--ac);background:var(--bg);min-width:0}
+.card input{width:130px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid label{flex-direction:column;align-items:stretch;gap:4px}.grid input{width:auto}
+#sRules{width:100%;box-sizing:border-box;min-height:130px;font-family:var(--mono);font-size:13px;line-height:1.5;white-space:pre;overflow:auto}
+.ap{display:flex;gap:14px;align-items:center}
+#wheel{width:150px;height:150px;flex:none;border-radius:50%;touch-action:none;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);-webkit-mask:radial-gradient(circle,transparent 52%,#000 53%);mask:radial-gradient(circle,transparent 52%,#000 53%)}
+.hexrow{display:flex;align-items:center;gap:8px;margin-bottom:10px}.hexrow input{width:100%}#hexdot{width:22px;height:22px;border-radius:6px;flex:none}
+#sw{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+#sw button{aspect-ratio:1;border-radius:10px;border:2px solid transparent;padding:0}#sw button.sel{border-color:#fff}
+#pre{display:flex;flex-wrap:wrap;gap:8px}.pre{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:20px;border:1px solid var(--ln);background:var(--bg);font-size:13px}.pre i{width:12px;height:12px;border-radius:50%}
 #smsg{min-height:1.4em}
-#sRules{width:100%;box-sizing:border-box;min-height:150px;padding:8px 10px;border-radius:8px;border:1px solid var(--ln);background:var(--pn);color:var(--tx);font:13px/1.5 ui-monospace,Menlo,monospace}
+.two{display:flex;gap:12px}.two button{flex:1;padding:14px;border-radius:30px;font-weight:600;border:1.5px solid var(--ac);background:var(--bg)}
+.two .solid{border:0;background:linear-gradient(135deg,var(--ac),#6d28d9);color:#fff}
+.box h3{margin:0;color:#d8c4ff}
+#sheet{position:fixed;inset:0;display:none;align-items:flex-end;background:rgba(0,0,0,.6);z-index:20;box-sizing:border-box;padding-bottom:var(--kb)}
+#sheet.on{display:flex}
+.box{width:100%;box-sizing:border-box;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));border-radius:20px 20px 0 0;border-top:1.5px solid var(--ac);background:var(--pn);display:flex;flex-direction:column;gap:10px}
+.box label{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#c8b4ff}
+.box input{flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1.5px solid var(--ac);background:var(--bg)}
+.box button{padding:13px;border-radius:14px;border:1.5px solid var(--ac);background:var(--bg);font-weight:600}
+.box .solid{border:0;background:linear-gradient(135deg,var(--ac),#6d28d9);color:#fff}
+.lt{display:flex;flex-direction:column;align-items:stretch;gap:8px}
+.card input[type=range]{width:100%;height:28px;padding:0;border:0;-webkit-appearance:none;appearance:none;border-radius:14px;background:linear-gradient(90deg,#000,var(--pk,var(--ac)),#fff)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;border:3px solid var(--ac2)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid var(--ac2)}
+.swt{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#c8b4ff}
+.card input[type=checkbox]{-webkit-appearance:none;appearance:none;width:52px;height:30px;padding:0;border-radius:15px;border:1.5px solid var(--ln);background:var(--bg);position:relative;flex:none}
+.card input[type=checkbox]::after{content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:var(--mu);transition:transform .15s}
+.card input[type=checkbox]:checked{background:var(--ac);border-color:var(--ac)}
+.card input[type=checkbox]:checked::after{transform:translateX(22px);background:#fff}
 </style></head>
 <body>
 <div id="app">
-<div class="screens">
 <section id="s1" class="screen on">
- <div class="top">
-  <textarea id="code" spellcheck="false" autocapitalize="off" autocorrect="off">opt="hello AEROLITE"
+ <header class="bar">
+  <button class="sq" id="bSet" aria-label="Settings">&#9881;&#xFE0E;</button>
+  <div class="seg"><button data-n="1" class="on">1</button><button data-n="2">2</button></div>
+  <button class="play" id="bRun" aria-label="Run">&#9654;&#xFE0E;</button>
+  <button class="ol" id="bSave">Save</button>
+ </header>
+ <div class="ed"><div id="gut"></div><textarea id="code" wrap="off" spellcheck="false" autocapitalize="off" autocorrect="off">opt="hello AEROLITE"
 ipt(all)="Type something"
-opt="You typed: " + x</textarea>
-  <div class="tools">
-   <button class="ib" id="bSet" aria-label="Settings">&#9881;&#xFE0E;</button>
-   <button class="ib run" id="bRun" aria-label="Run">&#9654;&#xFE0E;</button>
-   <button class="ib" id="bCol" aria-label="Color"><span class="dot"></span></button>
-  </div>
- </div>
+opt="You typed: " + x</textarea></div>
  <div class="sym" id="sym"></div>
 </section>
 <section id="s2" class="screen">
- <div class="hd"><button class="ib" id="bBack" aria-label="Back">&larr;</button><strong>Output</strong><button class="pill" id="bDrag">Drag</button></div>
- <div id="area">
-  <div id="out"></div>
-  <div id="askrow"><input id="ans" autocomplete="off" autocapitalize="off"><button class="pill" id="send">Send</button></div>
-  <button class="fl" id="fo">Out</button><button class="fl" id="fc">Clear</button>
+ <header class="bar">
+  <button class="ol" id="bBack">&lt; Back</button>
+  <div class="seg"><button data-n="1">1</button><button data-n="2" class="on">2</button></div>
+  <button class="ol bl" id="bDrag">Drag</button>
+ </header>
+ <div id="area"><div class="oh"><span>&gt;_</span> Output</div><div id="out"></div></div>
+ <div class="inrow"><input id="ans" disabled autocomplete="off" autocapitalize="off" placeholder="Type here when asked"><button class="ol" id="send" disabled>Send</button></div>
+</section>
+<section id="s3" class="screen">
+ <div class="scroll">
+  <div class="card hdr"><button class="sq" id="sBack" aria-label="Back">&#8249;</button><div><b>AEROLITE</b><div class="mu">Compiler Settings</div></div></div>
+  <div class="card"><h3>General Settings</h3><div class="mu">Customize your compiler experience</div>
+   <label>Font Style<select id="fsel"></select></label>
+   <label>Text Size<span><button class="ol" id="fm">A-</button> <button class="ol" id="fp">A+</button></span></label></div>
+  <div class="card"><h3>Your Commands (Rules)</h3><div class="mu">Define your own commands</div>
+   <textarea id="sRules" wrap="off" spellcheck="false" autocapitalize="off" autocorrect="off"></textarea></div>
+  <div class="card"><h3>Appearance Options</h3><div class="mu">Personalize the look</div>
+   <label class="swt">Change app color<input type="checkbox" id="live" aria-label="Change app color"></label>
+   <div class="mu" id="livehint"></div>
+   <div class="ap"><div id="wheel"></div><div style="flex:1;min-width:0"><div class="hexrow"><i id="hexdot"></i><input id="hex" aria-label="Hex code"></div><div id="sw"></div></div></div>
+   <label class="lt">Brightness (darker to lighter)<input type="range" id="lit" min="15" max="85" step="1" aria-label="Brightness"></label>
+   <h4>Theme Presets</h4><div id="pre"></div></div>
+  <div id="smsg" class="er"></div>
+  <div class="two"><button id="sReset">Reset</button><button class="solid" id="sSave">Save</button></div>
  </div>
 </section>
-<div id="pal"></div>
-<div id="set">
- <strong>Syntax and display</strong>
- <label>Output words<input id="sOut"></label>
- <label>Input words<input id="sInp"></label>
- <label>Assign symbol<input id="sAs"></label>
- <label>Join symbol<input id="sJo"></label>
- <label>Comment symbol<input id="sCm"></label>
- <label>Text size<span><button class="pill" id="fm">A-</button> <button class="pill" id="fp">A+</button></span></label>
- <div>Your own commands (rules)</div>
- <textarea id="sRules" spellcheck="false" autocapitalize="off" autocorrect="off"></textarea>
- <div class="mu">Format: rule say {value} =&gt; print({value})</div>
- <div id="smsg" class="er"></div>
- <div><button class="pill on" id="sSave">Save</button> <button class="pill" id="sReset">Reset</button></div>
 </div>
-</div>
-<nav><button id="n1" class="on">1</button><button id="n2">2</button></nav>
-</div>
+<div id="sheet"><div class="box">
+ <h3>Save code</h3>
+ <label>File name<input id="fname" value="program.aero" autocapitalize="off" autocomplete="off"></label>
+ <button class="solid" id="oDl">Save to phone (Downloads)</button>
+ <button id="oSh">Share or choose where to save</button>
+ <button id="oApp">Keep inside the app</button>
+ <div id="fmsg" class="mu"></div>
+ <button id="oClose">Close</button>
+</div></div>
 <script>
 const $=id=>document.getElementById(id);
-const DEF={out:"opt",inp:"ipt inp",assign:"=",join:"+",comment:"#",fs:15,ac:"#378add",rules:"rule set {new} to {value} => {new} = {value}\nrule add {value} to {var} => {var} = add({var}, {value})\nrule wait {number} => await wait({number})\nrule stop => stop()"};
+const DEF={out:"opt",inp:"ipt inp",assign:"=",join:"+",comment:"#",fs:15,ac:"#8A2BE2",ac2:"#3b82f6",font:"JetBrains Mono",live:true,rules:"rule set {new} to {value} => {new} = {value}\nrule add {value} to {var} => {var} = add({var}, {value})\nrule wait {number} => await wait({number})\nrule stop => stop()"};
 let S={...DEF};
-try{Object.assign(S,JSON.parse(localStorage.getItem("aero")||"{}"))}catch(e){}
-const store=()=>{try{localStorage.setItem("aero",JSON.stringify(S))}catch(e){}};
+try{Object.assign(S,JSON.parse(localStorage.getItem("aero2")||"{}"))}catch(e){}
+const store=()=>{try{localStorage.setItem("aero2",JSON.stringify(S))}catch(e){}};
 const words=s=>s.split(/[\s,]+/).filter(Boolean);
+const FONTS={"JetBrains Mono":"'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace","Fira Code":"'Fira Code',ui-monospace,Menlo,Consolas,monospace","Courier":"'Courier New',Courier,monospace","System Mono":"ui-monospace,Menlo,Consolas,monospace"};
+function rgba(h,a){const n=parseInt(h.slice(1),16);return "rgba("+(n>>16)+","+((n>>8)&255)+","+(n&255)+","+a+")"}
 function apply(){
- document.documentElement.style.setProperty("--ac",S.ac);
- $("code").style.setProperty("--fs",S.fs+"px");
+ const r=document.documentElement.style;
+ r.setProperty("--ac",S.ac);r.setProperty("--ac2",S.ac2);r.setProperty("--glow",rgba(S.ac,.35));
+ r.setProperty("--fs",S.fs+"px");r.setProperty("--mono",FONTS[S.font]||FONTS["System Mono"]);
  const keys=['"',S.assign,S.join,"(",")",words(S.out)[0],words(S.inp)[0],"all","int","float","alpha"];
  $("sym").innerHTML="";
  keys.forEach(t=>{const b=document.createElement("button");b.className="k";b.textContent=t;
   b.onmousedown=e=>e.preventDefault();
-  b.onclick=()=>{const c=$("code");c.setRangeText(t,c.selectionStart,c.selectionEnd,"end");c.focus()};
+  b.onclick=()=>{const c=$("code");c.setRangeText(t,c.selectionStart,c.selectionEnd,"end");c.focus();gut();keep()};
   $("sym").appendChild(b)});
 }
 function show(n){
- $("s1").classList.toggle("on",n===1);$("s2").classList.toggle("on",n===2);
- $("n1").classList.toggle("on",n===1);$("n2").classList.toggle("on",n===2);
- $("pal").style.display=$("set").style.display="none";
+ for(let i=1;i<=3;i++)$("s"+i).classList.toggle("on",i===n);
+ document.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",+b.dataset.n===n));
 }
-$("n1").onclick=$("bBack").onclick=()=>show(1);
-$("n2").onclick=()=>show(2);
+document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>show(+b.dataset.n));
+$("bBack").onclick=$("sBack").onclick=()=>show(1);
+function gut(){const c=$("code");$("gut").textContent=c.value.split("\n").map((_,i)=>i+1).join("\n");$("gut").scrollTop=c.scrollTop}
+function keep(){try{localStorage.setItem("aero2code",$("code").value)}catch(e){}}
+function kb(){const v=window.visualViewport;const h=v?Math.max(0,Math.round(window.innerHeight-v.height-v.offsetTop)):0;document.documentElement.style.setProperty("--kb",h+"px")}
+function fname(){let n=($("fname").value.trim()||"program").replace(/[\\\/:*?"<>|]/g,"_");if(!/\.aero$/i.test(n))n+=".aero";return n}
+function fmsg(t){$("fmsg").textContent=t}
+function openSave(){keep();$("sheet").classList.add("on");fmsg("")}
+$("oClose").onclick=()=>$("sheet").classList.remove("on");
+$("sheet").addEventListener("click",e=>{if(e.target===$("sheet"))$("sheet").classList.remove("on")});
+$("oApp").onclick=()=>{keep();fmsg("Saved inside the app")};
+$("oDl").onclick=()=>{
+ const n=fname(),a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob([$("code").value],{type:"application/octet-stream"}));a.download=n;
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+ fmsg("Saved "+n+" to your Downloads folder");
+};
+$("oSh").onclick=async()=>{
+ const f=new File([$("code").value],fname(),{type:"text/plain"});
+ if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:f.name})}catch(e){}}
+ else fmsg("Sharing is not available here. Use Save to phone.");
+};
+function init(){
+ try{const c=localStorage.getItem("aero2code");if(c!==null)$("code").value=c}catch(e){}
+ apply();gut();kb();
+ $("code").addEventListener("input",()=>{gut();keep()});
+ $("code").addEventListener("scroll",()=>{$("gut").scrollTop=$("code").scrollTop});
+ $("code").addEventListener("focus",()=>$("app").classList.add("typing"));
+ $("code").addEventListener("blur",()=>$("app").classList.remove("typing"));
+ if(window.visualViewport){visualViewport.addEventListener("resize",kb);visualViewport.addEventListener("scroll",kb)}
+ $("bSave").onclick=openSave;
+}
 
 /* ---- compiler ---- */
 const TY={
@@ -198,18 +261,18 @@ let runId=0;
 function pr(t,c){const d=document.createElement("div");if(c)d.className=c;d.textContent=t;$("out").appendChild(d);$("out").scrollTop=1e9}
 function ask(p,ty){
  return new Promise(res=>{
-  const [re,cv,msg]=TY[ty],row=$("askrow"),inp=$("ans");
-  pr(p,"mu");row.style.display="flex";inp.value="";inp.focus();
+  const [re,cv,msg]=TY[ty],inp=$("ans");
+  pr(p,"mu");inp.disabled=false;$("send").disabled=false;inp.value="";inp.focus();
   const go=()=>{
    const t=inp.value.trim();
    if(!re.test(t)){pr("  "+msg,"er");inp.value="";return}
-   row.style.display="none";pr("> "+t);res(cv(t));
+   inp.disabled=true;$("send").disabled=true;pr("> "+t);res(cv(t));
   };
   $("send").onclick=go;inp.onkeydown=e=>{if(e.key==="Enter")go()};
  });
 }
 async function run(){
- show(2);const id=++runId;$("out").textContent="";$("askrow").style.display="none";
+ show(2);const id=++runId;$("out").textContent="";$("ans").disabled=true;$("send").disabled=true;
  let st;try{st=parse($("code").value)}catch(e){pr(e.message,"er");return}
  const V={};
  for(const s of st){
@@ -225,28 +288,44 @@ async function run(){
 }
 $("bRun").onclick=run;
 
-/* ---- color ---- */
-["#378add","#2e9e5b","#8a63d2","#e8833a","#d4493e","#1fa0a0"].forEach(c=>{
- const b=document.createElement("button");b.style.background=c;b.setAttribute("aria-label","Color "+c);
- b.onclick=()=>{S.ac=c;store();apply();$("pal").style.display="none"};$("pal").appendChild(b);
-});
-$("bCol").onclick=()=>{$("pal").style.display=$("pal").style.display==="flex"?"none":"flex"};
-
 /* ---- settings ---- */
-function fill(){$("sOut").value=S.out;$("sInp").value=S.inp;$("sAs").value=S.assign;$("sJo").value=S.join;$("sCm").value=S.comment;$("sRules").value=S.rules;$("smsg").textContent=""}
-$("bSet").onclick=()=>{fill();$("set").style.display="flex"};
-$("fm").onclick=()=>{S.fs=Math.max(11,S.fs-1);apply()};
-$("fp").onclick=()=>{S.fs=Math.min(28,S.fs+1);apply()};
+const SW=["#ef4444","#f87171","#f97316","#f59e0b","#fde68a","#22c55e","#10b981","#2dd4bf","#2563eb","#38bdf8","#8A2BE2","#a855f7","#ec4899","#f1f5f9","#6b7280"];
+const PRE={"Neon Purple":["#8A2BE2","#3b82f6"],"Matrix Green":["#22c55e","#14b8a6"],"Ocean Blue":["#0ea5e9","#6366f1"],"Sunset":["#f59e0b","#ef4444"]};
+function hsl(h,s,l){s/=100;l/=100;const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l),f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return "#"+[f(0),f(8),f(4)].map(x=>Math.round(x*255).toString(16).padStart(2,"0")).join("")}
+function h2l(hex){const n=parseInt(hex.slice(1),16),r=(n>>16)/255,g=((n>>8)&255)/255,b=(n&255)/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,d=mx-mn;let hh=0,s=0;if(d){s=d/(1-Math.abs(2*l-1));hh=mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4;hh=(hh*60+360)%360}return [hh,s*100,l*100]}
+function paint(){
+ const on=S.live!==false;
+ document.documentElement.style.setProperty("--pk",P.ac);
+ $("hex").value=P.ac;$("hexdot").style.background=P.ac;
+ if(document.activeElement!==$("lit"))$("lit").value=Math.round(h2l(P.ac)[2]);
+ $("sw").querySelectorAll("button").forEach(b=>b.classList.toggle("sel",b.dataset.c.toLowerCase()===P.ac.toLowerCase()));
+ $("live").checked=on;
+ $("livehint").textContent=on?"On: the app changes to the color you pick.":"Off: the app color stays as it is. Colors you pick are only previewed here.";
+}
+let P={ac:S.ac,ac2:S.ac2};
+function setAc(c,c2){P.ac=c;if(c2)P.ac2=c2;if(S.live!==false){S.ac=P.ac;S.ac2=P.ac2;store();apply()}paint()}
+function setLive(on){S.live=on;if(on){S.ac=P.ac;S.ac2=P.ac2;apply()}store();paint()}
+SW.forEach(c=>{const b=document.createElement("button");b.dataset.c=c;b.style.background=c;b.setAttribute("aria-label","Color "+c);b.onclick=()=>setAc(c);$("sw").appendChild(b)});
+Object.entries(PRE).forEach(([n,[a,b2]])=>{const b=document.createElement("button");b.className="pre";b.innerHTML='<i style="background:'+a+'"></i>'+n;b.onclick=()=>setAc(a,b2);$("pre").appendChild(b)});
+Object.keys(FONTS).forEach(n=>{const o=document.createElement("option");o.textContent=n;$("fsel").appendChild(o)});
+$("fsel").onchange=()=>{S.font=$("fsel").value;store();apply()};
+$("hex").onchange=()=>{const v=$("hex").value.trim();if(/^#[0-9a-fA-F]{6}$/.test(v))setAc(v);else paint()};
+const wheel=$("wheel");
+function pick(e){const r=wheel.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;setAc(hsl((Math.atan2(y,x)*180/Math.PI+450)%360,85,+$("lit").value))}
+$("lit").oninput=()=>{const c=h2l(P.ac);setAc(hsl(c[0],c[1],+$("lit").value))};
+$("live").onchange=()=>setLive($("live").checked);
+wheel.addEventListener("pointerdown",e=>{wheel.setPointerCapture(e.pointerId);pick(e)});
+wheel.addEventListener("pointermove",e=>{if(e.buttons)pick(e)});
+function fill(){$("sRules").value=S.rules;$("fsel").value=S.font;$("smsg").textContent="";paint()}
+$("bSet").onclick=()=>{fill();show(3)};
+$("fm").onclick=()=>{S.fs=Math.max(11,S.fs-1);store();apply()};
+$("fp").onclick=()=>{S.fs=Math.min(28,S.fs+1);store();apply()};
 $("sSave").onclick=()=>{
- const v={out:$("sOut").value.trim(),inp:$("sInp").value.trim(),assign:$("sAs").value.trim(),join:$("sJo").value.trim(),comment:$("sCm").value.trim()};
- if(Object.values(v).some(x=>!x))return $("smsg").textContent="Fill in every field";
- if(!words(v.out).every(w=>/^[A-Za-z_]\w*$/.test(w))||!words(v.inp).every(w=>/^[A-Za-z_]\w*$/.test(w)))return $("smsg").textContent="Words can use letters, digits and _ only";
- if([v.assign,v.join,v.comment].some(x=>/[\s"]/.test(x)))return $("smsg").textContent="Symbols cannot contain spaces or quotes";
- const snap={...S};S.rules=$("sRules").value;Object.assign(S,v);
+ const snap={...S};S.rules=$("sRules").value;
  const er=reload();if(er){S=snap;reload();return $("smsg").textContent=er}
- store();apply();$("set").style.display="none";
+ store();apply();show(1);
 };
-$("sReset").onclick=()=>{S={...DEF};store();apply();reload();fill()};
+$("sReset").onclick=()=>{S={...DEF};P={ac:S.ac,ac2:S.ac2};store();apply();reload();fill()};
 
 /* ---- drag mode: tap Drag, then touch an icon and move it ---- */
 let dm=false,sel=null,mv=false;
@@ -270,8 +349,6 @@ document.querySelectorAll(".fl").forEach(el=>{
  el.addEventListener("pointerup",()=>{mv=false});
  el.addEventListener("click",e=>{if(dm){e.stopPropagation();return}el.onact&&el.onact()});
 });
-$("fo").onact=()=>$("out").classList.toggle("hide");
-$("fc").onact=()=>{$("out").textContent=""};
 $("area").addEventListener("click",e=>{if(dm&&sel&&!e.target.closest(".fl,#askrow"))place(sel,e.clientX,e.clientY)});
 
 /* ---- rules: your own commands, edited in Settings ---- */
@@ -338,7 +415,7 @@ function loadRules(){
 function reload(){try{RULES=loadRules();return ""}catch(e){RULES=[];return e.message}}
 reload();
 
-apply();
+init();
 if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body></html>
